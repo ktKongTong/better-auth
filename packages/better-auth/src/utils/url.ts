@@ -43,6 +43,14 @@ export function getBaseURL(url?: string, path?: string, request?: Request) {
 	if (fromRequest && fromRequestProto) {
 		return withPath(`${fromRequestProto}://${fromRequest}`, path);
 	}
+	
+	const fromReferer = request?.headers.get("referer");
+	if(fromReferer) {
+		const origin = getOrigin(fromReferer);
+		if (origin) {
+			return withPath(origin, path);
+		}
+	}
 
 	if (request) {
 		const url = getOrigin(request.url);
